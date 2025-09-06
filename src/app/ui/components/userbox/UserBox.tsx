@@ -28,7 +28,7 @@ export default function UserBox({user,hovered,isBlurred, searchTerm}: UserBoxPro
       `}>
         <Link href={userLink} className="w-full"
         onMouseEnter={
-            () => hovered && hovered(user.id)
+            () => hovered && (searchTerm == "") && hovered(user.id)
         }
         onMouseLeave={
             () => hovered && hovered(null)
