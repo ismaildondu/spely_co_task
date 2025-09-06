@@ -9,6 +9,7 @@ import {useQuery} from "@tanstack/react-query";
 import {useState} from "react";
 import LoadingMockUserBox from "@/app/ui/components/userbox/LoadingMockUserBox";
 
+import UserSearchInput from "@/app/ui/components/usersearch/UserSearchInput";
 
 export default function Users() {
     const {data, error, isLoading} = useQuery<User[], Error>({
@@ -17,6 +18,8 @@ export default function Users() {
     });
 
     const [hoveredUserId, setHoveredUserId] = useState<number | null>(null);
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
 
   return (
       <div className="
@@ -44,9 +47,10 @@ export default function Users() {
         {error && (
             <p className="text-red-600">Error: {error.message}</p>
         )}
+        <UserSearchInput setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
         {data && data.map(user => (
 
-            <UserBox isBlurred={hoveredUserId !== (null) && hoveredUserId !== user.id} hovered={setHoveredUserId} key={user.id} user={user}/>
+            <UserBox searchTerm={searchTerm} isBlurred={(hoveredUserId !== (null) && hoveredUserId !== user.id) || searchTerm != "" && !((user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.email.toLowerCase().includes(searchTerm.toLowerCase())  ))} hovered={setHoveredUserId} key={user.id} user={user}/>
         ))}
 
     </section>
