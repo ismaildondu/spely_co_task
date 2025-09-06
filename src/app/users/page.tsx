@@ -1,7 +1,23 @@
+"use client";
+
 import Image from "next/image";
 import {inter} from "@/app/ui/fonts";
-import UserBox from "@/app/ui/UserBox";
+import UserBox from "@/app/ui/components/userbox/UserBox";
+import {User} from "@/app/lib/types/User";
+import {UserService} from "@/app/lib/services/user.service";
+import {useQuery} from "@tanstack/react-query";
+import {useState} from "react";
+import LoadingMockUserBox from "@/app/ui/components/userbox/LoadingMockUserBox";
+
+
 export default function Users() {
+    const {data, error, isLoading} = useQuery<User[], Error>({
+        queryKey: ['users'],
+        queryFn: UserService.getUsers
+    });
+
+    const [hoveredUserId, setHoveredUserId] = useState<number | null>(null);
+
   return (
       <div className="
       bg-gray-100
@@ -21,14 +37,19 @@ export default function Users() {
     
     
     `}>
-        <UserBox />
-        <UserBox />
-        <UserBox />
-        <UserBox />
-        <UserBox />
+
+        {isLoading && (
+           [1,2,3,4,5,6,7,8,9,10].map(n => (<LoadingMockUserBox key={n}/>))
+        )}
+        {error && (
+            <p className="text-red-600">Error: {error.message}</p>
+        )}
+        {data && data.map(user => (
+
+            <UserBox isBlurred={hoveredUserId !== (null) && hoveredUserId !== user.id} hovered={setHoveredUserId} key={user.id} user={user}/>
+        ))}
 
     </section>
-
       </div>
   );
 }

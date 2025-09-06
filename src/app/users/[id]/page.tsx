@@ -7,7 +7,6 @@ export default function Users() {
         <div className="
       bg-gray-100
     min-h-screen">
-
             <div>
                 <Link href={"/users"} className="cursor-pointer text-blue-600 p-4 inline-block transition-all duration-300 hover:px-2.5 hover:text-blue-700">
                    <div className="flex items-center gap-2">
