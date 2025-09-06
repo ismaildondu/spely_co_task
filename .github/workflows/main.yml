@@ -1,0 +1,29 @@
+name: task_action
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: change rep
+        uses: actions/checkout@v3
+
+      - name: set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' 
+
+      - name: npm install
+        run: npm install
+
+      - name: lint
+        run: npm run lint
+
+      - name: build
+        run: npm run build
