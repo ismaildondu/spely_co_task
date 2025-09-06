@@ -1,8 +1,43 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
 import {inter} from "@/app/ui/fonts";
 import {ArrowBigLeft, Briefcase, Building2, CircleDot, Globe, House, Phone, Target, Workflow} from "lucide-react";
+import {usePathname} from "next/navigation";
+import {useQuery} from "@tanstack/react-query";
+import {User} from "@/app/lib/types/User";
+import {UserService} from "@/app/lib/services/user.service";
+
+
 export default function Users() {
+    const userId = usePathname().split("/").pop();
+    const {data, error, isLoading} = useQuery<User, Error>({
+        queryKey: ['user', userId],
+        queryFn: () => UserService.getUser(userId || ""),
+        enabled: !!userId
+    });
+
+    if (error) {
+        return (
+            <div className="
+      bg-gray-100
+    min-h-screen flex justify-center items-center">
+                <p className="text-red-600 text-lg">Error: {error.message}</p>
+            </div>
+        );
+    }
+
+    if (isLoading) {
+        return (
+            <div className="
+      bg-gray-100
+    min-h-screen flex justify-center items-center">
+                <p className="text-gray-600 text-lg">Loading user...</p>
+            </div>
+        );
+    }
+
+
     return (
         <div className="
       bg-gray-100
@@ -46,11 +81,11 @@ export default function Users() {
             flex flex-col justify-center
             ">
                     <p className="text-lg underline text-gray-900">
-                        Leanne Graham
+                        {data!.name}
                     </p>
 
                     <p className="text-gray-600 text-sm">
-                        Sincere@april.biz
+                        {data!.email}
                     </p>
                 </div>
 
@@ -77,7 +112,7 @@ export default function Users() {
                             Street:
                         </span>
                         <span className="text-gray-800 text-sm">
-                            Kulas Light
+                            {data!.address.street}
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -86,7 +121,7 @@ export default function Users() {
                             Suite:
                         </span>
                         <span className="text-gray-800 text-sm">
-                            Apt. 556
+                            {data!.address.suite}
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -95,7 +130,7 @@ export default function Users() {
                             City:
                         </span>
                         <span className="text-gray-800 text-sm">
-                            Gwenborough
+                            {data!.address.city}
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -104,7 +139,7 @@ export default function Users() {
                             Zipcode:
                         </span>
                         <span className="text-gray-800 text-sm">
-                            92998-3874
+                            {data!.address.zipcode}
                         </span>
                     </div>
                 </div>
@@ -132,7 +167,7 @@ export default function Users() {
                             Company Name:
                         </span>
                         <span className="text-gray-800 text-sm">
-                            Romaguera-Crona
+                            {data!.company.name}
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -141,7 +176,7 @@ export default function Users() {
                              Phrase:
                         </span>
                         <span className="text-gray-800 text-sm">
-                            Multi-layered client-server neural-net
+                            {data!.company.catchPhrase}
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -150,7 +185,7 @@ export default function Users() {
                             BS:
                         </span>
                         <span className="text-gray-800 text-sm">
-                            harness real-time e-markets
+                            {data!.company.bs}
                         </span>
                     </div>
 
@@ -169,7 +204,7 @@ export default function Users() {
             flex flex-col justify-center
             ">
                     <p className="text-gray-800 text-sm">
-                        <span className="underline text-gray-600">Username:</span>&nbsp;Bret
+                        <span className="underline text-gray-600">Username:</span>&nbsp; {data!.username}
                     </p>
                 </div>
 
@@ -188,14 +223,14 @@ export default function Users() {
                         <div className="flex items-center gap-1">
                             <Phone className="text-gray-600 w-4 h-4"/>
                             <p className="text-gray-800 underline text-sm">
-                                1-770-736-8031 x56442
+                                {data!.phone}
                             </p>
                         </div>
 
                         <div className="flex items-center gap-1">
                             <Globe className="text-gray-600 w-4 h-4"/>
                             <p className="text-gray-800 underline text-sm">
-                                hildegard.org
+                                {data!.website}
                             </p>
                         </div>
 

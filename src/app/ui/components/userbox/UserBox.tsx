@@ -9,13 +9,15 @@ interface UserBoxProps {
 }
 
 export default function UserBox({user,hovered,isBlurred}: UserBoxProps) {
+    const userLink = `/users/${user.id}`;
+
     return(
         <div className={`
         w-full 
         transition-all duration-500 ease-in-out 
         ${isBlurred ? "blur-sm" : "blur-none"}
       `}>
-        <Link href={"/users/1"} className="w-full"
+        <Link href={userLink} className="w-full"
         onMouseEnter={
             () => hovered && hovered(user.id)
         }
